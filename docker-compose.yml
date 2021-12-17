@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+    web:
+        image: nginx:latest
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - ./conf/nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
+            - ./app:/app
+    php:
+        build:
+            context: .
+            dockerfile: PHP.Dockerfile
+        volumes:
+            - ./app:/app:cached
+            - ./conf/php/php.ini:/usr/local/etc/php/php.ini
+    mysql:
+        image: mariadb:latest
+        environment:
+            MYSQL_ROOT_PASSWORD: 'M@d6De@d6M@d6'
+            MYSQL_USER: 'gazkit'
+            MYSQL_PASSWORD: 'M@d6De@d6M@d6'
+            MYSQL_DATABASE: 'gazkit'
+        volumes:
+            - mysqldata:/var/lib/mysql
+        ports:
+            - 3306:3306
+volumes:
+    mysqldata: {}
